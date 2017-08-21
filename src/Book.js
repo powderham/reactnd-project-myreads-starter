@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 // <Book
 //   title="To Kill a Mockingbird"
@@ -7,6 +8,11 @@ import React, {Component} from 'react';
 // />
 
 class Book extends Component {
+  static propTypes = {
+    authors: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired
+  }
   render() {
     return(
       <div className="book">

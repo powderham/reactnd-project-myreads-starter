@@ -7,13 +7,26 @@ class Search extends Component {
   state = {
     books: []
   }
+  updateSearch(search) {
+    this.setState({
+      search: search.trim()
+    })
+  }
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
-      console.log(books)
+      console.log(books);
     })
   }
   render() {
+    const { search } = this.state
+    const { books } = this.state
+    let showingBooks
+    if (search) {
+      showingBooks = []
+    } else {
+      showingBooks = books
+    }
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -31,14 +44,20 @@ class Search extends Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input type="text" placeholder="Search by title or author"/>
+            <input
+            type="text"
+            placeholder="Search by title or author"
+            onChange={(event) => {
+              this.updateSearch(event.target.value)
+              }}
+            />
 
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map((book) => (
-              <li>
+            {showingBooks.map((book) => (
+              <li key={book.id}>
                 <Book
                   title={book.title}
                   authors={book.authors}
