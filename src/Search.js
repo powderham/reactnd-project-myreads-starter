@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
+import Book from './Book'
 
 class Search extends Component {
+  state = {
+    books: []
+  }
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+      console.log(books)
+    })
+  }
   render() {
     return(
       <div className="search-books">
@@ -25,7 +36,18 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {this.state.books.map((book) => (
+              <li>
+                <Book
+                  title={book.title}
+                  authors={book.authors}
+                  url={book.imageLinks.thumbnail}
+                />
+              </li>
+            ))
+          }
+          </ol>
         </div>
       </div>
     )
