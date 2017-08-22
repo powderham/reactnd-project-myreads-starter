@@ -13,7 +13,7 @@ class Search extends Component {
   }
   updateSearch(search) {
     this.setState({
-      search: search.trim()
+      search: search
     })
     //@TODO fix case where thumbnail is undefined (assuming no books in array)
     this.searchBooks(search)
@@ -26,7 +26,6 @@ class Search extends Component {
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
-      console.log(books);
     })
   }
   render() {
@@ -70,6 +69,7 @@ class Search extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {showingBooks.map((book) => (
+              //@TODO guard against showingBooks being empty
               <li key={book.id}>
                 <Book
                   title={book.title}
