@@ -2,14 +2,25 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book'
+import escapeRegExp from 'escape-string-regexp';
 
 class Search extends Component {
   state = {
-    books: []
+    books: [],
+    //Question for Jens/Lorjenso: why does this need to be set to avoid warning about input element switching from controlled to uncontrolled?
+    search: '',
+    searchResult: []
   }
   updateSearch(search) {
     this.setState({
       search: search.trim()
+    })
+    //@TODO fix case where thumbnail is undefined (assuming no books in array)
+    this.searchBooks(search)
+  }
+  searchBooks(term) {
+    BooksAPI.search(term,10).then((searchResult) => {
+      this.setState({searchResult})
     })
   }
   componentDidMount() {
@@ -19,11 +30,12 @@ class Search extends Component {
     })
   }
   render() {
-    const { search } = this.state
-    const { books } = this.state
+    const { search, books, searchResult } = this.state
+
     let showingBooks
     if (search) {
-      showingBooks = []
+      // const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      showingBooks = searchResult
     } else {
       showingBooks = books
     }
@@ -47,6 +59,7 @@ class Search extends Component {
             <input
             type="text"
             placeholder="Search by title or author"
+            value={this.state.search}
             onChange={(event) => {
               this.updateSearch(event.target.value)
               }}
