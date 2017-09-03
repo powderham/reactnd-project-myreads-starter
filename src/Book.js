@@ -1,26 +1,48 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-
-// <Book
-//   title="To Kill a Mockingbird"
-//   authors="Harper Lee"
-//   url="http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api"
-// />
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { get, update } from "./BooksAPI";
+import { updateShelf } from "./helpers/UpdateShelf";
 
 class Book extends Component {
   static propTypes = {
+    id: PropTypes.string.isRequired,
     authors: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
+    updateShelf: PropTypes.func.isRequired
+  };
+
+  updateBook(value) {
+    const id = this.props.id;
+    this.props.updateShelf(id, value);
   }
+
+  handleClick(value) {
+    this.updateBook(value);
+  }
+
   render() {
-    return(
+    const { shelf } = this.props;
+    return (
       <div className="book">
         <div className="book-top">
-        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${this.props.url})` }}></div>
+          <div
+            className="book-cover"
+            style={{
+              width: 128,
+              height: 193,
+              backgroundImage: `url(${this.props.url})`
+            }}
+          />
           <div className="book-shelf-changer">
-            <select>
-              <option value="none" disabled>Move to...</option>
+            <select
+              onChange={e => this.handleClick(e.target.value)}
+              defaultValue={shelf}
+            >
+              <option value="none" disabled>
+                Move to...
+              </option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
@@ -28,10 +50,14 @@ class Book extends Component {
             </select>
           </div>
         </div>
-        <div className="book-title">{this.props.title}</div>
-        <div className="book-authors">{this.props.authors}</div>
+        <div className="book-title">
+          {this.props.title}
+        </div>
+        <div className="book-authors">
+          {this.props.authors}
+        </div>
       </div>
-    )
+    );
   }
 }
 

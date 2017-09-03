@@ -7,7 +7,6 @@ import escapeRegExp from 'escape-string-regexp';
 class Search extends Component {
   state = {
     books: [],
-    //Question for Jens/Lorjenso: why does this need to be set to avoid warning about input element switching from controlled to uncontrolled?
     search: '',
     searchResult: []
   }
@@ -18,6 +17,7 @@ class Search extends Component {
     //@TODO fix case where thumbnail is undefined (assuming no books in array)
     this.searchBooks(search)
   }
+
   searchBooks(term) {
     BooksAPI.search(term,10).then((searchResult) => {
       this.setState({searchResult})
@@ -69,12 +69,13 @@ class Search extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {showingBooks.map((book) => (
-              //@TODO guard against showingBooks being empty
               <li key={book.id}>
                 <Book
+                  id={book.id}
                   title={book.title}
                   authors={book.authors}
                   url={book.imageLinks.thumbnail}
+                  shelf={book.shelf}
                 />
               </li>
             ))
