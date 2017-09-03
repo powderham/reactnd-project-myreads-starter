@@ -13,7 +13,6 @@ class Bookshelf extends Component {
     const { title, books = [] } = this.props;
     return (
       <div className="bookshelf">
-        {console.log(books)}
         <h2 className="bookshelf-title">
           {title}
         </h2>

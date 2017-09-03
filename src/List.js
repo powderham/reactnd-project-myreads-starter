@@ -6,32 +6,34 @@ import { updateBook } from "./helpers/UpdateShelf";
 
 class List extends Component {
   state = {
-    books: [],
-  }
+    books: []
+  };
 
   componentDidMount() {
     getAll().then(response => {
-      this.setState({books: response});
+      this.setState({ books: response });
     });
     this.updateShelf = this.updateShelf.bind(this);
   }
 
   updateShelf(id, value) {
-    updateBook(id, value)
-    var books = this.state.books
+    updateBook(id, value);
+    var books = this.state.books;
     for (var book in books) {
-      if(books[book].id === id){
-        books[book].shelf = value
+      if (books[book].id === id) {
+        books[book].shelf = value;
       }
     }
-    this.setState({books: books})
+    this.setState({ books: books });
   }
 
   render() {
     const { books } = this.state;
-    const currentlyReading = books.filter(book => book.shelf === "currentlyReading")
-    const wantToRead = books.filter(book => book.shelf === "wantToRead")
-    const read = books.filter(book => book.shelf === "read")
+    const currentlyReading = books.filter(
+      book => book.shelf === "currentlyReading"
+    );
+    const wantToRead = books.filter(book => book.shelf === "wantToRead");
+    const read = books.filter(book => book.shelf === "read");
     return (
       <div>
         <div className="list-books">
